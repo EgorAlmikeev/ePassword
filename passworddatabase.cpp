@@ -65,23 +65,34 @@ void PasswordDataBase::writeFromMap()
     if(!data_file.isOpen())
         data_file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered);
 
-    QByteArray buff;
     QString last_key = NULL;
+    QByteArray key_buff, name_buff, note_buff, password_buff;
 
-    for(iter = element_multi_map.begin(); iter != element_multi_map.end(); ++iter, buff.clear())
+    for(iter = element_multi_map.begin(); iter != element_multi_map.end(); ++iter)
     {
         if(iter.key() != last_key)
         {
             last_key = iter.key();
-            buff.append(last_key);
-            data_file.write(buff);
-            buff.clear();
+            key_buff.append(last_key);
+            data_file.write(key_buff);
+            key_buff.clear();
         }
 
-        buff.clear();
-        buff.append(iter.value());
-        data_file.write(buff);
+        password_buff.append((iter++).value());
+        note_buff.append((iter++).value());
+        name_buff.append((iter).value());
+
+        data_file.write(name_buff);
+        data_file.write(note_buff);
+        data_file.write(password_buff);
+
+        name_buff.clear();
+        note_buff.clear();
+        password_buff.clear();
+        key_buff.clear();
     }
+
+    data_file.close();
 }
 
 void PasswordDataBase::showMap()
