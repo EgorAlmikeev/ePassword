@@ -1,5 +1,8 @@
 #include "passworddatabase.h"
 #include "encryptor.h"
+#include <iostream>
+
+using namespace std;
 
 PasswordDataBase::PasswordDataBase()
 {
@@ -16,8 +19,6 @@ PasswordDataBase::~PasswordDataBase()
 
 void PasswordDataBase::start()
 {
-    system("clear");
-
     decryptDataFile();
     readToMap();
     showMenu();
@@ -95,10 +96,42 @@ void PasswordDataBase::writeFromMap()
 }
 
 void PasswordDataBase::showMap()
-{}
+{
+    short counter = 0;
+    QString last_key = NULL;
+
+    cout << "\n\tSaved data :\n";
+
+    for(iter = element_multi_map.begin(); iter != element_multi_map.end(); ++iter)
+        if(iter.key() != last_key)
+        {
+            last_key = iter.key();
+            cout << "\t\tdata#" << counter++ << " " << last_key.toStdString();
+        }
+
+}
 void PasswordDataBase::showMenu()
 {
+    system("clear");
     showMap();
+
+    cout << "\n\t1. Add data"
+            "\n\t2. Show data"
+            "\n\t3. Edit data"
+            "\n\t4. Remove data"
+            "\n\t5. Wipe data"
+            "\n\t6. Exit"
+            "\n\tset : ";
+
+    switch(getInt())
+    {
+    case 1 : addElement(); break;
+    case 2 : showElement(); break;
+    case 3 : editElement(); break;
+    case 4 : removeElement(); break;
+    case 5 : wipeDataFile(); break;
+    case 6 : finish(); break;
+    }
 }
 
 void PasswordDataBase::addElement()
@@ -109,9 +142,26 @@ void PasswordDataBase::editElement()
 {}
 void PasswordDataBase::removeElement()
 {}
-
+void PasswordDataBase::wipeDataFile()
+{}
 void PasswordDataBase::generatePassword()
 {}
 
 int PasswordDataBase::getInt()
-{}
+{
+    int value;
+
+    while(true)
+    {
+        cin  >> value;
+        if(cin.good())
+        {
+            cin.ignore(10, '\n');
+            break;
+        }
+        cin.clear();
+        cin.ignore(10, '\n');
+    }
+
+    return value;
+}

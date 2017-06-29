@@ -26,6 +26,8 @@ protected :
     void editElement();
     void removeElement();
 
+    void wipeDataFile();
+
     void generatePassword();
 
     void encryptDataFile();
