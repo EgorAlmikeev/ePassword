@@ -20,7 +20,6 @@ void PasswordDataBase::start()
 
     decryptDataFile();
     readToMap();
-    showMap();
     showMenu();
 }
 
@@ -98,7 +97,9 @@ void PasswordDataBase::writeFromMap()
 void PasswordDataBase::showMap()
 {}
 void PasswordDataBase::showMenu()
-{}
+{
+    showMap();
+}
 
 void PasswordDataBase::addElement()
 {}
