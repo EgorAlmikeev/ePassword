@@ -7,9 +7,7 @@ int main(int argc, char *argv[])
 {
 
     PasswordDataBase pdb;
-
-    pdb.start();    //проблема переворачивания значений
-    pdb.finish();
+    pdb.start();
 
     return 0;
 }

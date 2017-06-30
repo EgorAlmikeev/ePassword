@@ -1,10 +1,10 @@
 #ifndef PASSWORDDATABASE_H
 #define PASSWORDDATABASE_H
 
-#include "encryptor.h"
 #include <QMultiMap>
 #include <QString>
 #include <QFile>
+#include <time.h>
 
 class PasswordDataBase
 {
@@ -12,8 +12,19 @@ protected :
 
     QMultiMap<QString, QString> element_multi_map;
     QFile data_file;
-    Encryptor encr;
+//    Encryptor encr;
     QMultiMap<QString, QString>::iterator iter;
+    char *password_simbols = nullptr;
+
+    //password simbols generation functions
+    void setPasswordSimbolsDigits();
+    void setPasswordSimbolsLetters();
+    void setPasswordSimbolsSpecials();
+    void setPasswordSimbolsDigitsLetters();
+    void setPasswordSimbolsDigitsSpecials();
+    void setPasswordSimbolsLettersSpecials();
+    void setPasswordSimbolsDigitsLettersSpecials();
+    //end of password simbols generation functions
 
     void readToMap();
     void writeFromMap();
@@ -28,12 +39,12 @@ protected :
 
     void wipeDataFile();
 
-    void generatePassword();
+    std::string generatePassword();
 
     void encryptDataFile();
     void decryptDataFile();
 
-    int getInt();
+    int getSwitchChoice(int min, int max);
 
 public :
 

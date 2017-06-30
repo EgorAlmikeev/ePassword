@@ -1,6 +1,7 @@
 #include "passworddatabase.h"
-#include "encryptor.h"
+//#include "encryptor.h"
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -8,8 +9,8 @@ PasswordDataBase::PasswordDataBase()
 {
     data_file.setFileName("./saves.txt");
 
-    encr.setFileName(data_file.fileName());
-    encr.setFlag("encrypted");
+//    encr.setFileName(data_file.fileName());
+//    encr.setFlag("encrypted");
 
     iter = element_multi_map.begin();
 }
@@ -110,32 +111,83 @@ void PasswordDataBase::showMap()
         }
 
 }
+
 void PasswordDataBase::showMenu()
 {
-    system("clear");
-    showMap();
-
-    cout << "\n\t1. Add data"
-            "\n\t2. Show data"
-            "\n\t3. Edit data"
-            "\n\t4. Remove data"
-            "\n\t5. Wipe data"
-            "\n\t6. Exit"
-            "\n\tset : ";
-
-    switch(getInt())
+    while(true)
     {
-    case 1 : addElement(); break;
-    case 2 : showElement(); break;
-    case 3 : editElement(); break;
-    case 4 : removeElement(); break;
-    case 5 : wipeDataFile(); break;
-    case 6 : finish(); break;
+        system("clear");
+        showMap();
+
+        cout << "\n\t1. Add data"
+                "\n\t2. Show data"
+                "\n\t3. Edit data"
+                "\n\t4. Remove data"
+                "\n\t5. Wipe data"
+                "\n\t6. Exit"
+                "\n\tset : ";
+
+        switch(getSwitchChoice(1, 6))
+        {
+        case 1 : addElement(); break;
+        case 2 : showElement(); break;
+        case 3 : editElement(); break;
+        case 4 : removeElement(); break;
+        case 5 : wipeDataFile(); break;
+        case 6 : finish(); break;
+        default : cerr << "\n\t#error : fatal error..."; exit(1); break;
+        }
     }
 }
 
 void PasswordDataBase::addElement()
-{}
+{
+    string name, note, password;
+
+    system("clear");
+    while(true)
+    {
+        cout << "\n\tSet new data name (20 max) : ";
+        cin >> setw(20) >> name;
+
+        cin.clear();
+        cin.ignore(10, '\n');
+
+        if(!element_multi_map.contains(QString::fromStdString(name)) == false)
+        {
+            short temp;
+            cout << "\n\t#error : \"" << name << "\" is already saved...";
+            cout << "\n\tPress Enter to back to menu...";
+            cin.unsetf(ios::skipws);
+            cin >> temp;
+            cin.setf(ios::skipws);
+            cin.clear();
+            cin.ignore(10, '\n');
+            return;
+        }
+        else
+            break;
+    }
+
+    system("clear");
+    cout << "\n\tSet a short note for this data (120 max) : ";
+    cin >> setw(120) >> note;
+
+    cin.clear();
+    cin.ignore(10, '\n');
+
+    system("clear");
+    password = generatePassword();
+
+    name += "\n";
+    note += "\n";
+    password += "\n";
+
+    element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(name));
+    element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(note));
+    element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(password));
+}
+
 void PasswordDataBase::showElement()
 {}
 void PasswordDataBase::editElement()
@@ -144,24 +196,139 @@ void PasswordDataBase::removeElement()
 {}
 void PasswordDataBase::wipeDataFile()
 {}
-void PasswordDataBase::generatePassword()
-{}
+string PasswordDataBase::generatePassword()
+{
+    cout << "\n\tSelect the complexity of the password"
+            "\n\t1. Only digits"
+            "\n\t2. Only letters"
+            "\n\t3. Only specials"
+            "\n\t4. Digits + letters"
+            "\n\t5. Digits + specials"
+            "\n\t6. Letters + specials"
+            "\n\t7. Digits + letters + specials (recommended)"
+            "\n\tset : ";
 
-int PasswordDataBase::getInt()
+    switch(getSwitchChoice(1, 7))
+    {
+    case 1 : setPasswordSimbolsDigits(); break;
+    case 2 : setPasswordSimbolsLetters(); break;
+    case 3 : setPasswordSimbolsSpecials(); break;
+    case 4 : setPasswordSimbolsDigitsLetters(); break;
+    case 5 : setPasswordSimbolsDigitsSpecials(); break;
+    case 6 : setPasswordSimbolsLettersSpecials(); break;
+    case 7 : setPasswordSimbolsDigitsLettersSpecials(); break;
+    default : cerr << "\n\t#error : fatal error..."; exit(1); break;
+    }
+
+    string password;
+    short password_length = 25;
+    short password_simbols_length = strlen(password_simbols);
+
+    srand(time(NULL));
+
+    for(int i = 0; i < password_length; ++i)
+        password += password_simbols[rand() % password_simbols_length];
+
+    return password;
+}
+
+int PasswordDataBase::getSwitchChoice(int min, int max)
 {
     int value;
-
+    cin.unsetf(ios::skipws);
     while(true)
     {
         cin  >> value;
+        if(value < min || value > max)
+            cin.clear(ios::failbit);
         if(cin.good())
         {
             cin.ignore(10, '\n');
-            break;
+            cin.setf(ios::skipws);
+            return value;
         }
+        cout << "\n\t#error : input error, try again...\n\tset : ";
         cin.clear();
         cin.ignore(10, '\n');
     }
-
-    return value;
 }
+
+//password simbols generation functions
+void PasswordDataBase::setPasswordSimbolsDigits()
+{
+    password_simbols = new char[11];
+
+    for(int i = 0; i < 10; ++i)
+        password_simbols[i] = i + 48;
+
+    password_simbols[10] = '\0';
+}
+void PasswordDataBase::setPasswordSimbolsLetters()
+{
+    password_simbols = new char[53];
+
+    for(int i = 0; i < 26; ++i)
+        password_simbols[i] = i + 65;
+    for(int i = 26; i < 52; ++i)
+        password_simbols[i] = i + 71;
+
+    password_simbols[52] = '\0';
+}
+void PasswordDataBase::setPasswordSimbolsSpecials()
+{
+    password_simbols = new char[16];
+
+    for(int i = 0; i < 15; ++i)
+        password_simbols[i] = i + 33;
+
+    password_simbols[15] = '\0';
+}
+void PasswordDataBase::setPasswordSimbolsDigitsLetters()
+{
+    password_simbols = new char[63];
+
+    for(int i = 0; i < 26; ++i)
+        password_simbols[i] = i + 65;
+    for(int i = 26; i < 52; ++i)
+        password_simbols[i] = i + 71;
+    for(int i = 52; i < 62; ++i)
+        password_simbols[i] = i - 4;
+
+    password_simbols[62] = '\0';
+}
+void PasswordDataBase::setPasswordSimbolsDigitsSpecials()
+{
+    password_simbols = new char[26];
+
+    for(int i = 0; i < 25; ++i)
+        password_simbols[i] = i + 33;
+
+    password_simbols[25] = '\0';
+}
+void PasswordDataBase::setPasswordSimbolsLettersSpecials()
+{
+    password_simbols = new char[68];
+
+    for(int i = 0; i < 26; ++i)
+        password_simbols[i] = i + 65;
+    for(int i = 26; i < 52; ++i)
+        password_simbols[i] = i + 71;
+    for(int i = 52; i < 67; ++i)
+        password_simbols[i] = i - 19;
+
+    password_simbols[67] = '\0';
+}
+void PasswordDataBase::setPasswordSimbolsDigitsLettersSpecials()
+{
+    password_simbols = new char[78];
+
+    for(int i = 0; i < 26; ++i)
+        password_simbols[i] = i + 65;
+    for(int i = 26; i < 52; ++i)
+        password_simbols[i] = i + 71;
+    for(int i = 52; i < 77; ++i)
+        password_simbols[i] = i - 19;
+
+    password_simbols[77] = '\0';
+}
+//end of password simbols generation functions
