@@ -46,6 +46,8 @@ void PasswordDataBase::encryptDataFile()
 
 void PasswordDataBase::readToMap()
 {
+    element_multi_map.clear();
+
     if(!data_file.isOpen())
         data_file.open(QIODevice::ReadOnly);
 
@@ -129,10 +131,10 @@ void PasswordDataBase::showMenu()
 
         switch(getSwitchChoice(1, 6))
         {
-        case 1 : addElement(); break;
+        case 1 : addElement(); writeFromMap(); break;
         case 2 : showElement(); break;
-        case 3 : editElement(); break;
-        case 4 : removeElement(); break;
+        case 3 : editElement(); writeFromMap(); break;
+        case 4 : removeElement(); writeFromMap(); break;
         case 5 : wipeDataFile(); break;
         case 6 : finish(); break;
         default : cerr << "\n\t#error : fatal error..."; exit(1); break;
@@ -145,33 +147,31 @@ void PasswordDataBase::addElement()
     string name, note, password;
 
     system("clear");
-    while(true)
-    {
-        cout << "\n\tSet new data name (20 max) : ";
-        cin >> setw(20) >> name;
 
+    cout << "\n\tSet new data name (20 max) : ";
+    cin >> setw(20) >> name;
+
+    cin.clear();
+    cin.ignore(10, '\n');
+
+    if(element_multi_map.contains(QString::fromStdString(name + '\n')))
+    {
+        short temp;
+        cout << "\n\t#error : \"" << name << "\" is already saved...";
+        cout << "\n\tPress Enter to back to menu...";
+        cin.unsetf(ios::skipws);
+        cin >> temp;
+        cin.setf(ios::skipws);
         cin.clear();
         cin.ignore(10, '\n');
-
-        if(!element_multi_map.contains(QString::fromStdString(name)) == false)
-        {
-            short temp;
-            cout << "\n\t#error : \"" << name << "\" is already saved...";
-            cout << "\n\tPress Enter to back to menu...";
-            cin.unsetf(ios::skipws);
-            cin >> temp;
-            cin.setf(ios::skipws);
-            cin.clear();
-            cin.ignore(10, '\n');
-            return;
-        }
-        else
-            break;
+        return;
     }
 
+    cin.unsetf(ios::skipws);
     system("clear");
     cout << "\n\tSet a short note for this data (120 max) : ";
     cin >> setw(120) >> note;
+    cin.setf(ios::skipws);
 
     cin.clear();
     cin.ignore(10, '\n');
@@ -189,7 +189,13 @@ void PasswordDataBase::addElement()
 }
 
 void PasswordDataBase::showElement()
-{}
+{
+//    string name;
+//    system("clear");
+
+//    cout << "\n\tWhat to show : ";
+//    cin >> setw(20) >> name;
+}
 void PasswordDataBase::editElement()
 {}
 void PasswordDataBase::removeElement()
