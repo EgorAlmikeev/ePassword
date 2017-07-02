@@ -146,19 +146,15 @@ void PasswordDataBase::addElement()
 {
     string name, note, password;
 
-    system("clear");
-
     cout << "\n\tSet new data name (20 max) : ";
     cin >> setw(20) >> name;
 
-    cin.clear();
-    cin.ignore(10, '\n');
-
     if(element_multi_map.contains(QString::fromStdString(name + '\n')))
     {
+        cin.ignore(10, '\n');
         short temp;
         cout << "\n\t#error : \"" << name << "\" is already saved...";
-        cout << "\n\tPress Enter to back to menu...";
+        cout << "\n\tPress Enter...";
         cin.unsetf(ios::skipws);
         cin >> temp;
         cin.setf(ios::skipws);
@@ -167,8 +163,8 @@ void PasswordDataBase::addElement()
         return;
     }
 
+    cin.ignore(10, '\n');
     cin.unsetf(ios::skipws);
-    system("clear");
     cout << "\n\tSet a short note for this data (120 max) : ";
     cin >> setw(120) >> note;
     cin.setf(ios::skipws);
@@ -190,18 +186,83 @@ void PasswordDataBase::addElement()
 
 void PasswordDataBase::showElement()
 {
-//    string name;
-//    system("clear");
+    string name, note, password;
 
-//    cout << "\n\tWhat to show : ";
-//    cin >> setw(20) >> name;
+    cout << "\n\tWhat to show : ";
+    cin >> setw(20) >> name;
+
+    if(!element_multi_map.contains(QString::fromStdString(name + '\n')))
+    {
+        cin.ignore(10, '\n');
+        short temp;
+        cout << "\n\t#error : \"" << name << "\" is not saved...";
+        cout << "\n\tPress Enter...";
+        cin.unsetf(ios::skipws);
+        cin >> temp;
+        cin.setf(ios::skipws);
+        cin.clear();
+        cin.ignore(10, '\n');
+        return;
+    }
+
+    system("clear");
+    iter = element_multi_map.find(QString::fromStdString(name + '\n'));
+
+    password = (iter++).value().toStdString();
+    note = (iter++).value().toStdString();
+    name = (iter++).value().toStdString();
+
+    cout << "\tName : " << name;
+    cout << "\tNote : " << note;
+    cout << "\tPassword : " << password;
+
+    cin.ignore(10, '\n');
+    short temp;
+    cout << "\n\tPress Enter to back to menu...";
+    cin.unsetf(ios::skipws);
+    cin >> temp;
+    cin.setf(ios::skipws);
+    cin.clear();
+    cin.ignore(10, '\n');
+    return;
 }
+
 void PasswordDataBase::editElement()
 {}
+
 void PasswordDataBase::removeElement()
-{}
+{
+    string name;
+    cout << "\n\tWhat to remove : ";
+    cin >> setw(20) >> name;
+
+    if(!element_multi_map.contains(QString::fromStdString(name + '\n')))
+    {
+        cin.ignore(10, '\n');
+        short temp;
+        cout << "\n\t#error : \"" << name << "\" is not saved...";
+        cout << "\n\tPress Enter...";
+        cin.unsetf(ios::skipws);
+        cin >> temp;
+        cin.setf(ios::skipws);
+        cin.clear();
+        cin.ignore(10, '\n');
+        return;
+    }
+
+    iter = element_multi_map.find(QString::fromStdString(name + '\n'));
+
+    element_multi_map.erase(iter++);
+    element_multi_map.erase(iter++);
+    element_multi_map.erase(iter++);
+
+    cin.clear();
+    cin.ignore(10, '\n');
+}
+
 void PasswordDataBase::wipeDataFile()
 {}
+
 string PasswordDataBase::generatePassword()
 {
     cout << "\n\tSelect the complexity of the password"
