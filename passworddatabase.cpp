@@ -228,7 +228,93 @@ void PasswordDataBase::showElement()
 }
 
 void PasswordDataBase::editElement()
-{}
+{
+    string new_name, name, note, password;
+
+    cout << "\n\tWhat to edit : ";
+    cin >> setw(20) >> name;
+
+    name += "\n";
+
+    if(!element_multi_map.contains(QString::fromStdString(name)))
+    {
+        cin.ignore(10, '\n');
+        short temp;
+        cout << "\n\t#error : \"" << name << "\" is not saved...";
+        cout << "\n\tPress Enter...";
+        cin.unsetf(ios::skipws);
+        cin >> temp;
+        cin.setf(ios::skipws);
+        cin.clear();
+        cin.ignore(10, '\n');
+        return;
+    }
+
+    cin.ignore(10, '\n');
+
+    while(true)
+    {
+        system("clear");
+        iter = element_multi_map.find(QString::fromStdString(name));
+
+        if(iter == element_multi_map.end())
+            clog << "\nlog : iter == end()";
+
+        password = (iter++).value().toStdString();
+        note = (iter++).value().toStdString();
+        name = (iter++).value().toStdString();
+
+        cout << "\tName : " << name;
+        cout << "\tNote : " << note;
+        cout << "\tPassword : " << password;
+
+        cout << endl;
+
+        cout << "\n\t1. Change name"
+                "\n\t2. Change note"
+                "\n\t3. Change password"
+                "\n\t4. Back"
+                "\n\tset : ";
+
+        switch(getSwitchChoice(1, 4))
+        {
+        case 1 :
+        {
+            cout << "\n\tSet new name (20 max) : ";
+            cin >> setw(20) >> new_name;
+            new_name += "\n";
+            cin.ignore(10, '\n');
+            break;
+        }
+        case 2 :
+        {
+            cout << "\n\tSet new note (120 max) : ";
+            cin >> setw(120) >> note;
+            note += "\n";
+            cin.ignore(10, '\n');
+            break;
+        }
+        case 3 : system("clear"); password = generatePassword(); password += "\n"; break;
+        case 4 : return; break;
+        default : cerr << "\n\t#error : fatal error..."; exit(1); break;
+        }
+
+        iter = element_multi_map.find(QString::fromStdString(name));
+
+        if(iter == element_multi_map.end())
+            clog << "\nlog : iter == end()";
+
+        element_multi_map.erase(iter++);
+        element_multi_map.erase(iter++);
+        element_multi_map.erase(iter++);
+
+        name = new_name;
+
+        element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(name));
+        element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(note));
+        element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(password));
+    }
+}
 
 void PasswordDataBase::removeElement()
 {
