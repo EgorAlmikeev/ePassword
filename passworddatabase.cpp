@@ -135,7 +135,7 @@ void PasswordDataBase::showMenu()
         case 2 : showElement(); break;
         case 3 : editElement(); writeFromMap(); break;
         case 4 : removeElement(); writeFromMap(); break;
-        case 5 : wipeDataFile(); break;
+        case 5 : wipeDataFile(); writeFromMap(); break;
         case 6 : finish(); break;
         default : cerr << "\n\t#error : fatal error..."; exit(1); break;
         }
@@ -347,7 +347,9 @@ void PasswordDataBase::removeElement()
 }
 
 void PasswordDataBase::wipeDataFile()
-{}
+{
+    element_multi_map.clear();
+}
 
 string PasswordDataBase::generatePassword()
 {
