@@ -97,6 +97,8 @@ void Encryptor::encryptFileProcess()
     buff.append(file_data);
 
     file.write(buff);
+
+    std::cout << endl;
 }
 
 void Encryptor::decryptFileProcess()

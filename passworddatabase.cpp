@@ -1,5 +1,4 @@
 #include "passworddatabase.h"
-//#include "encryptor.h"
 #include <iostream>
 #include <iomanip>
 
@@ -7,7 +6,7 @@ using namespace std;
 
 PasswordDataBase::PasswordDataBase()
 {
-    data_file.setFileName("./saves.txt");
+    data_file.setFileName("./saves.bin");
 
     encr.setFileName(data_file.fileName());
     encr.setFlag("encrypted");
@@ -20,7 +19,14 @@ PasswordDataBase::~PasswordDataBase()
 
 void PasswordDataBase::start()
 {
-    decryptDataFile();
+    try
+    {
+        decryptDataFile();
+    }
+    catch(Encryptor::EncryptorException exc)
+    {
+        exc.errmsg();
+    }
     readToMap();
     showMenu();
 }
@@ -28,7 +34,14 @@ void PasswordDataBase::start()
 void PasswordDataBase::finish()
 {
     writeFromMap();
-    encryptDataFile();
+    try
+    {
+        encryptDataFile();
+    }
+    catch(Encryptor::EncryptorException exc)
+    {
+        exc.errmsg();
+    }
     exit(0);
 }
 
@@ -211,6 +224,8 @@ void PasswordDataBase::showElement()
     note = (iter++).value().toStdString();
     name = (iter++).value().toStdString();
 
+    cout << "\n\n\n\n";
+
     cout << "\tName : " << name;
     cout << "\tNote : " << note;
     cout << "\tPassword : " << password;
@@ -262,6 +277,8 @@ void PasswordDataBase::editElement()
         password = (iter++).value().toStdString();
         note = (iter++).value().toStdString();
         name = (iter++).value().toStdString();
+
+        cout << "\n\n\n\n";
 
         cout << "\tName : " << name;
         cout << "\tNote : " << note;
