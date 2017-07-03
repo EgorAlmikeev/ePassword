@@ -5,6 +5,7 @@
 #include <QString>
 #include <QFile>
 #include <time.h>
+#include "encryptor.h"
 
 class PasswordDataBase
 {
@@ -12,7 +13,7 @@ protected :
 
     QMultiMap<QString, QString> element_multi_map;
     QFile data_file;
-//    Encryptor encr;
+    Encryptor encr;
     QMultiMap<QString, QString>::iterator iter;
     char *password_simbols = nullptr;
 

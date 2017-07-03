@@ -9,8 +9,8 @@ PasswordDataBase::PasswordDataBase()
 {
     data_file.setFileName("./saves.txt");
 
-//    encr.setFileName(data_file.fileName());
-//    encr.setFlag("encrypted");
+    encr.setFileName(data_file.fileName());
+    encr.setFlag("encrypted");
 
     iter = element_multi_map.begin();
 }
@@ -34,14 +34,13 @@ void PasswordDataBase::finish()
 
 void PasswordDataBase::decryptDataFile()
 {
-//    if(encr.isFileDataEncrypted())
-//        encr.decryptFileProcess();
+    encr.decryptFileProcess();
 }
 
 void PasswordDataBase::encryptDataFile()
 {
-//    if(!encr.isFileDataEncrypted())
-//        encr.encryptFileProcess();
+    if(!encr.isFileDataEncrypted())
+        encr.encryptFileProcess();
 }
 
 void PasswordDataBase::readToMap()
