@@ -8,8 +8,8 @@ PasswordDataBase::PasswordDataBase()
 {
     data_file.setFileName("./saves.bin");
 
-    encr.setFileName(data_file.fileName());
-    encr.setFlag("encrypted");
+//    encr.setFileName(data_file.fileName());
+//    encr.setFlag("encrypted");
 
     iter = element_multi_map.begin();
 }
@@ -19,14 +19,14 @@ PasswordDataBase::~PasswordDataBase()
 
 void PasswordDataBase::start()
 {
-    try
-    {
-        decryptDataFile();
-    }
-    catch(Encryptor::EncryptorException exc)
-    {
-        exc.errmsg();
-    }
+//    try
+//    {
+//        decryptDataFile();
+//    }
+//    catch(Encryptor::EncryptorException exc)
+//    {
+//        exc.errmsg();
+//    }
     readToMap();
     showMenu();
 }
@@ -34,26 +34,26 @@ void PasswordDataBase::start()
 void PasswordDataBase::finish()
 {
     writeFromMap();
-    try
-    {
-        encryptDataFile();
-    }
-    catch(Encryptor::EncryptorException exc)
-    {
-        exc.errmsg();
-    }
+//    try
+//    {
+//        encryptDataFile();
+//    }
+//    catch(Encryptor::EncryptorException exc)
+//    {
+//        exc.errmsg();
+//    }
     exit(0);
 }
 
 void PasswordDataBase::decryptDataFile()
 {
-    encr.decryptFileProcess();
+//    encr.decryptFileProcess();
 }
 
 void PasswordDataBase::encryptDataFile()
 {
-    if(!encr.isFileDataEncrypted())
-        encr.encryptFileProcess();
+//    if(!encr.isFileDataEncrypted())
+//        encr.encryptFileProcess();
 }
 
 void PasswordDataBase::readToMap()
