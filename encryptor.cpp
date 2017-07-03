@@ -29,6 +29,8 @@ void Encryptor::setFlag(QString _flag)
 
 bool Encryptor::isFileDataEncrypted()
 {
+    tryToOpenFile();
+
     if(file_data.isEmpty())
     {
         file.seek(0);
@@ -97,6 +99,7 @@ void Encryptor::encryptFileProcess()
     buff.append(file_data);
 
     file.write(buff);
+    file.close();
 
     std::cout << endl;
 }
@@ -139,6 +142,7 @@ void Encryptor::decryptFileProcess()
     buff.append(file_data);
 
     file.write(buff);
+    file.close();
 }
 
 void Encryptor::encryptFileData()

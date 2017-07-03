@@ -8,8 +8,8 @@ PasswordDataBase::PasswordDataBase()
 {
     data_file.setFileName("./saves.bin");
 
-//    encr.setFileName(data_file.fileName());
-//    encr.setFlag("encrypted");
+    encr.setFileName(data_file.fileName());
+    encr.setFlag("encrypted");
 
     iter = element_multi_map.begin();
 }
@@ -19,14 +19,14 @@ PasswordDataBase::~PasswordDataBase()
 
 void PasswordDataBase::start()
 {
-//    try
-//    {
-//        decryptDataFile();
-//    }
-//    catch(Encryptor::EncryptorException exc)
-//    {
-//        exc.errmsg();
-//    }
+    try
+    {
+        decryptDataFile();
+    }
+    catch(Encryptor::EncryptorException exc)
+    {
+        exc.errmsg();
+    }
     readToMap();
     showMenu();
 }
@@ -34,20 +34,21 @@ void PasswordDataBase::start()
 void PasswordDataBase::finish()
 {
     writeFromMap();
-//    try
-//    {
-//        encryptDataFile();
-//    }
-//    catch(Encryptor::EncryptorException exc)
-//    {
-//        exc.errmsg();
-//    }
+    try
+    {
+        encryptDataFile();
+    }
+    catch(Encryptor::EncryptorException exc)
+    {
+        exc.errmsg();
+    }
     exit(0);
 }
 
 void PasswordDataBase::decryptDataFile()
 {
-//    encr.decryptFileProcess();
+//    if(encr.isFileDataEncrypted())
+//        encr.decryptFileProcess();
 }
 
 void PasswordDataBase::encryptDataFile()
@@ -61,7 +62,7 @@ void PasswordDataBase::readToMap()
     element_multi_map.clear();
 
     if(!data_file.isOpen())
-        data_file.open(QIODevice::ReadOnly);
+        data_file.open(QIODevice::ReadOnly | QIODevice::Unbuffered);
 
     while(!data_file.atEnd())
     {
@@ -304,10 +305,12 @@ void PasswordDataBase::editElement()
         }
         case 2 :
         {
+            cin.unsetf(ios::skipws);
             cout << "\n\tSet new note (120 max) : ";
             cin >> setw(120) >> note;
             note += "\n";
             cin.ignore(10, '\n');
+            cin.setf(ios::skipws);
             break;
         }
         case 3 : system("clear"); password = generatePassword(); password += "\n"; break;
@@ -369,6 +372,8 @@ void PasswordDataBase::wipeDataFile()
 
 string PasswordDataBase::generatePassword()
 {
+    string password;
+
     cout << "\n\tSelect the complexity of the password"
             "\n\t1. Only digits"
             "\n\t2. Only letters"
@@ -377,9 +382,10 @@ string PasswordDataBase::generatePassword()
             "\n\t5. Digits + specials"
             "\n\t6. Letters + specials"
             "\n\t7. Digits + letters + specials (recommended)"
+            "\n\t8. Set password from keyboard"
             "\n\tset : ";
 
-    switch(getSwitchChoice(1, 7))
+    switch(getSwitchChoice(1, 8))
     {
     case 1 : setPasswordSimbolsDigits(); break;
     case 2 : setPasswordSimbolsLetters(); break;
@@ -388,10 +394,10 @@ string PasswordDataBase::generatePassword()
     case 5 : setPasswordSimbolsDigitsSpecials(); break;
     case 6 : setPasswordSimbolsLettersSpecials(); break;
     case 7 : setPasswordSimbolsDigitsLettersSpecials(); break;
+    case 8 : cout << "\n\tSet password : "; cin >> password; cin.ignore(10, '\n'); return password;
     default : cerr << "\n\t#error : fatal error..."; exit(1); break;
     }
 
-    string password;
     short password_length = 25;
     short password_simbols_length = strlen(password_simbols);
 
