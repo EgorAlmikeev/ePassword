@@ -178,12 +178,13 @@ void PasswordDataBase::addElement()
 
     cin.ignore(10, '\n');
     cin.unsetf(ios::skipws);
-    cout << "\n\tSet a short note for this data (120 max) : ";
-    cin >> setw(120) >> note;
+    cout << "\n\tSet a short note for this data (60 max) : ";
+    getline(cin, note);
     cin.setf(ios::skipws);
+    if(note.length() > 60)
+        note.erase(60, note.length());
 
     cin.clear();
-    cin.ignore(10, '\n');
 
     system("clear");
     password = generatePassword();
@@ -249,9 +250,7 @@ void PasswordDataBase::editElement()
     cout << "\n\tWhat to edit : ";
     cin >> setw(20) >> name;
 
-    name += "\n";
-
-    if(!element_multi_map.contains(QString::fromStdString(name)))
+    if(!element_multi_map.contains(QString::fromStdString(name + '\n')))
     {
         cin.ignore(10, '\n');
         short temp;
@@ -267,13 +266,12 @@ void PasswordDataBase::editElement()
 
     cin.ignore(10, '\n');
 
+    name += "\n";
+
     while(true)
     {
         system("clear");
         iter = element_multi_map.find(QString::fromStdString(name));
-
-        if(iter == element_multi_map.end())
-            clog << "\nlog : iter == end()";
 
         password = (iter++).value().toStdString();
         note = (iter++).value().toStdString();
@@ -306,11 +304,12 @@ void PasswordDataBase::editElement()
         case 2 :
         {
             cin.unsetf(ios::skipws);
-            cout << "\n\tSet new note (120 max) : ";
-            cin >> setw(120) >> note;
-            note += "\n";
-            cin.ignore(10, '\n');
+            cout << "\n\tSet a short note for this data (60 max) : ";
+            getline(cin, note);
             cin.setf(ios::skipws);
+            if(note.length() > 60)
+                note.erase(60, note.length());
+            note += '\n';
             break;
         }
         case 3 : system("clear"); password = generatePassword(); password += "\n"; break;
@@ -320,18 +319,18 @@ void PasswordDataBase::editElement()
 
         iter = element_multi_map.find(QString::fromStdString(name));
 
-        if(iter == element_multi_map.end())
-            clog << "\nlog : iter == end()";
-
         element_multi_map.erase(iter++);
         element_multi_map.erase(iter++);
         element_multi_map.erase(iter++);
 
-        name = new_name;
+        if(!new_name.empty())
+            name = new_name;
 
         element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(name));
         element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(note));
         element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(password));
+
+        new_name.clear();
     }
 }
 
