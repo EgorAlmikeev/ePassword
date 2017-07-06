@@ -15,7 +15,7 @@ public:
     Cryptor(QString crypt_file_name);
     ~Cryptor();
 
-    void setCryptFileName(QString &crypt_file_name);
+    void setCryptFileName(QString crypt_file_name);
 
     void encryptFile();
     void decryptFile();

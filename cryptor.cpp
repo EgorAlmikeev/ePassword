@@ -23,7 +23,7 @@ void Cryptor::CryptorException::errmsg()
     cerr << "\n#error [CRYPTOR] : " << what.toStdString();
 }
 
-void Cryptor::setCryptFileName(QString &crypt_file_name)
+void Cryptor::setCryptFileName(QString crypt_file_name)
 {
     file.setFileName(crypt_file_name);
 }

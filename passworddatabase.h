@@ -13,7 +13,6 @@ protected :
 
     QFile data_file;
     Cryptor cryptor;
-    bool cryption_on_off;
     char *password_simbols = nullptr;
     QMultiMap<QString, QString>::iterator iter;
     QMultiMap<QString, QString> element_multi_map;
@@ -45,8 +44,6 @@ protected :
 
     void encryptDataFile();
     void decryptDataFile();
-
-    void setCryptionOnOff();
 
     int getSwitchChoice(int min, int max);
 
