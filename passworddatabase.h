@@ -5,15 +5,18 @@
 #include <QString>
 #include <QFile>
 #include <time.h>
+#include <cryptor.h>
 
 class PasswordDataBase
 {
 protected :
 
-    QMultiMap<QString, QString> element_multi_map;
     QFile data_file;
-    QMultiMap<QString, QString>::iterator iter;
+    Cryptor cryptor;
+    bool cryption_on_off;
     char *password_simbols = nullptr;
+    QMultiMap<QString, QString>::iterator iter;
+    QMultiMap<QString, QString> element_multi_map;
 
     //password simbols generation functions
     void setPasswordSimbolsDigits();
@@ -42,6 +45,8 @@ protected :
 
     void encryptDataFile();
     void decryptDataFile();
+
+    void setCryptionOnOff();
 
     int getSwitchChoice(int min, int max);
 

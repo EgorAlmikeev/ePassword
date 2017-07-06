@@ -6,9 +6,10 @@ using namespace std;
 
 PasswordDataBase::PasswordDataBase()
 {
+    cryption_on_off = false;
     data_file.setFileName("./saves.bin");
-
     iter = element_multi_map.begin();
+    cryptor.setCryptFileName(data_file.fileName());
 }
 
 PasswordDataBase::~PasswordDataBase()
@@ -29,10 +30,16 @@ void PasswordDataBase::finish()
 }
 
 void PasswordDataBase::decryptDataFile()
-{}
+{
+    if(cryption_on_off)
+        cryptor.decryptFile();
+}
 
 void PasswordDataBase::encryptDataFile()
-{}
+{
+    if(cryption_on_off)
+        cryptor.encryptFile();
+}
 
 void PasswordDataBase::readToMap()
 {
@@ -109,6 +116,9 @@ void PasswordDataBase::showMenu()
     while(true)
     {
         system("clear");
+
+        cout << "\n\tCRYPTION MODE : " + (cryption_on_off) ? "ON" : "OFF";
+
         showMap();
 
         cout << "\n\t1. Add data"
@@ -116,19 +126,36 @@ void PasswordDataBase::showMenu()
                 "\n\t3. Edit data"
                 "\n\t4. Remove data"
                 "\n\t5. Wipe data"
-                "\n\t6. Exit"
+                "\n\t6. Cryption turn on/off"
+                "\n\t7. Exit"
                 "\n\tset : ";
 
-        switch(getSwitchChoice(1, 6))
+        switch(getSwitchChoice(1, 7))
         {
         case 1 : addElement(); writeFromMap(); break;
         case 2 : showElement(); break;
         case 3 : editElement(); writeFromMap(); break;
         case 4 : removeElement(); writeFromMap(); break;
         case 5 : wipeDataFile(); writeFromMap(); break;
-        case 6 : finish(); break;
+        case 6 : break;
+        case 7 : finish(); break;
         default : cerr << "\n\t#error : fatal error..."; exit(1); break;
         }
+    }
+}
+
+void PasswordDataBase::setCryptionOnOff()
+{
+    system("clear");
+    cout << "\n\tCRYPTION MODE : " + (cryption_on_off) ? "ON" : "OFF";
+    cout << "\n\n\t1. Turn ON"
+            "\n\t2.Turn OFF"
+            "\n\tset : ";
+
+    switch(getSwitchChoice(1, 2))
+    {
+    case 1 : cryption_on_off = true; return;
+    case 2 : cryption_on_off = false; return;
     }
 }
 
