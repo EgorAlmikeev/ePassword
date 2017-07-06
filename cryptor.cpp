@@ -69,7 +69,6 @@ void Cryptor::encryptFile()
     file.write(buff);
     file.close();
 }
-
 void Cryptor::decryptFile()
 {
     if(!file.exists())

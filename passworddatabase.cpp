@@ -20,31 +20,26 @@ PasswordDataBase::PasswordDataBase()
 
 PasswordDataBase::~PasswordDataBase()
 {}
-
 void PasswordDataBase::start()
 {
     decryptDataFile();
     readToMap();
     showMenu();
 }
-
 void PasswordDataBase::finish()
 {
     writeFromMap();
     encryptDataFile();
     exit(0);
 }
-
 void PasswordDataBase::decryptDataFile()
 {
     cryptor.decryptFile();
 }
-
 void PasswordDataBase::encryptDataFile()
 {
     cryptor.encryptFile();
 }
-
 void PasswordDataBase::readToMap()
 {
     element_multi_map.clear();
@@ -63,7 +58,6 @@ void PasswordDataBase::readToMap()
 
     data_file.close();
 }
-
 void PasswordDataBase::writeFromMap()
 {
     if(!data_file.isOpen())
@@ -98,7 +92,6 @@ void PasswordDataBase::writeFromMap()
 
     data_file.close();
 }
-
 void PasswordDataBase::showMap()
 {
     short counter = 0;
@@ -114,7 +107,6 @@ void PasswordDataBase::showMap()
         }
 
 }
-
 void PasswordDataBase::showMenu()
 {
     while(true)
@@ -142,7 +134,6 @@ void PasswordDataBase::showMenu()
         }
     }
 }
-
 void PasswordDataBase::addElement()
 {
     string name, note, password;
@@ -185,7 +176,6 @@ void PasswordDataBase::addElement()
     element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(note));
     element_multi_map.insertMulti(QString::fromStdString(name), QString::fromStdString(password));
 }
-
 void PasswordDataBase::showElement()
 {
     string name, note, password;
@@ -230,7 +220,6 @@ void PasswordDataBase::showElement()
     cin.ignore(10, '\n');
     return;
 }
-
 void PasswordDataBase::editElement()
 {
     string new_name, name, note, password;
@@ -335,7 +324,6 @@ void PasswordDataBase::editElement()
         new_name.clear();
     }
 }
-
 void PasswordDataBase::removeElement()
 {
     string name;
@@ -365,12 +353,10 @@ void PasswordDataBase::removeElement()
     cin.clear();
     cin.ignore(10, '\n');
 }
-
 void PasswordDataBase::wipeDataFile()
 {
     element_multi_map.clear();
 }
-
 string PasswordDataBase::generatePassword()
 {
     string password;
@@ -409,7 +395,6 @@ string PasswordDataBase::generatePassword()
 
     return password;
 }
-
 int PasswordDataBase::getSwitchChoice(int min, int max)
 {
     int value;
