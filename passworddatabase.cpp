@@ -24,12 +24,15 @@ void PasswordDataBase::start()
 {
     decryptDataFile();
     readToMap();
+    encryptDataFile();
     showMenu();
 }
 void PasswordDataBase::finish()
 {
+    decryptDataFile();
     writeFromMap();
     encryptDataFile();
+    system("clear");
     exit(0);
 }
 void PasswordDataBase::decryptDataFile()
@@ -124,11 +127,11 @@ void PasswordDataBase::showMenu()
 
         switch(getSwitchChoice(1, 6))
         {
-        case 1 : addElement(); writeFromMap(); break;
+        case 1 : addElement(); decryptDataFile(); writeFromMap(); encryptDataFile(); break;
         case 2 : showElement(); break;
-        case 3 : editElement(); writeFromMap(); break;
-        case 4 : removeElement(); writeFromMap(); break;
-        case 5 : wipeDataFile(); writeFromMap(); break;
+        case 3 : editElement(); decryptDataFile(); writeFromMap(); encryptDataFile(); break;
+        case 4 : removeElement(); decryptDataFile(); writeFromMap(); encryptDataFile(); break;
+        case 5 : wipeDataFile(); decryptDataFile(); writeFromMap(); encryptDataFile(); break;
         case 6 : finish(); break;
         default : cerr << "\n\t#error : fatal error..."; exit(1); break;
         }
